@@ -1,3 +1,3 @@
-class Model3 < ActiveRecord::Base
+class Recipe < ActiveRecord::Base
   # add associatons!
 end
