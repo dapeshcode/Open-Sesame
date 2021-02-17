@@ -67,13 +67,12 @@ class Interface
         end
     end
 
-    def all_recipes
-        Recipe.all.map{|recipe| recipe.name}
-    end
-
     def all_recipes_names
-        prompt.select("Which recipe sounds good to you?", all_recipes)
-        
+        menu_choice = prompt.select("Which recipe sounds good to you?", Recipe.all_recipes)
+        recipe = Recipe.find_by_name(menu_choice)
+        puts recipe.name
+        puts recipe.ingredients
+        puts recipe.method      
     end
 
     def recipes_by_category
