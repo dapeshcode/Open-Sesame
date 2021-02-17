@@ -1,3 +1,4 @@
 class RecipeCategory < ActiveRecord::Base
-    # add associatons!
+    belongs_to :recipe 
+    belongs_to :category
   end
