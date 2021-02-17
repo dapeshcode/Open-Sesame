@@ -1,0 +1,117 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    activemodel (5.2.4.5)
+      activesupport (= 5.2.4.5)
+    activerecord (5.2.4.5)
+      activemodel (= 5.2.4.5)
+      activesupport (= 5.2.4.5)
+      arel (>= 9.0)
+    activerecord-reset-pk-sequence (0.2.1)
+    activesupport (5.2.4.5)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 0.7, < 2)
+      minitest (~> 5.1)
+      tzinfo (~> 1.1)
+    arel (9.0.0)
+    artii (2.1.2)
+    coderay (1.1.3)
+    colorize (0.8.1)
+    concurrent-ruby (1.1.8)
+    faker (2.16.0)
+      i18n (>= 1.6, < 2)
+    formatador (0.2.5)
+    i18n (1.8.9)
+      concurrent-ruby (~> 1.0)
+    kramdown (2.3.0)
+      rexml
+    method_source (1.0.0)
+    minitest (5.14.3)
+    mustermann (1.1.1)
+      ruby2_keywords (~> 0.0.1)
+    pastel (0.8.0)
+      tty-color (~> 0.5)
+    pry (0.14.0)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
+    rack (2.2.3)
+    rack-protection (2.1.0)
+      rack
+    rake (13.0.3)
+    require_all (3.0.0)
+    rexml (3.2.4)
+    rouge (3.26.0)
+    ruby2_keywords (0.0.4)
+    sinatra (2.1.0)
+      mustermann (~> 1.0)
+      rack (~> 2.2)
+      rack-protection (= 2.1.0)
+      tilt (~> 2.0)
+    sinatra-activerecord (2.0.22)
+      activerecord (>= 4.1)
+      sinatra (>= 1.0)
+    sqlite3 (1.4.2)
+    strings (0.2.0)
+      strings-ansi (~> 0.2)
+      unicode-display_width (~> 1.5)
+      unicode_utils (~> 1.4)
+    strings-ansi (0.2.0)
+    thread_safe (0.3.6)
+    tilt (2.0.10)
+    tty-box (0.7.0)
+      pastel (~> 0.8)
+      strings (~> 0.2.0)
+      tty-cursor (~> 0.7)
+    tty-color (0.6.0)
+    tty-cursor (0.7.1)
+    tty-markdown (0.7.0)
+      kramdown (>= 1.16.2, < 3.0)
+      pastel (~> 0.8)
+      rouge (~> 3.14)
+      strings (~> 0.2.0)
+      tty-color (~> 0.5)
+      tty-screen (~> 0.8)
+    tty-progressbar (0.18.1)
+      strings-ansi (~> 0.2)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.8)
+      unicode-display_width (>= 1.6, < 3.0)
+    tty-prompt (0.23.0)
+      pastel (~> 0.8)
+      tty-reader (~> 0.8)
+    tty-reader (0.9.0)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.8)
+      wisper (~> 2.0)
+    tty-screen (0.8.1)
+    tty-tree (0.4.0)
+    tzinfo (1.2.9)
+      thread_safe (~> 0.1)
+    unicode-display_width (1.7.0)
+    unicode_utils (1.4.0)
+    wisper (2.0.1)
+
+PLATFORMS
+  x86_64-darwin-20
+
+DEPENDENCIES
+  activerecord (~> 5.2)
+  activerecord-reset-pk-sequence
+  artii
+  colorize
+  faker
+  formatador
+  pry
+  rake
+  require_all
+  sinatra-activerecord
+  sqlite3
+  tty-box
+  tty-markdown
+  tty-progressbar
+  tty-prompt
+  tty-reader
+  tty-tree
+
+BUNDLED WITH
+   2.2.10
