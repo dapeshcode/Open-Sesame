@@ -12,8 +12,12 @@ end
 
 desc "start our app"
 task :start do
-  app = openSesame.new
-  app.run
+
+  # app = openSesame.new
+  # app.run
+
+  interface = Interface.new
+  interface.welcome
 end
 
 namespace :remind_me_about do
