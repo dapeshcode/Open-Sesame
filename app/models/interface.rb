@@ -3,6 +3,8 @@ class Interface
     attr_reader :prompt
     attr_accessor :user
 
+    @@recipe_to_save = 0 
+
     def initialize
         @prompt = TTY::Prompt.new
     end
@@ -60,19 +62,22 @@ class Interface
 
     def main_menu
         prompt.select("What would you like to do?") do |menu|
-        menu.choice "Browse All Recipes", -> {all_recipes_names}
+        menu.choice "Browse All Recipes", -> {all_recipe_names}
         menu.choice "Search By Category", -> {recipes_by_category}
         menu.choice "My Saved Recipes", -> {user_recipes}
         menu.choice "Close Sesame!", -> {exit_helper}
         end
     end
 
-    def all_recipes_names
+    def all_recipe_names
         menu_choice = prompt.select("Which recipe sounds good to you?", Recipe.all_recipes)
         recipe = Recipe.find_by_name(menu_choice)
+        @@recipe_to_save = recipe.id
         puts recipe.name
         puts recipe.ingredients
-        puts recipe.method      
+        puts recipe.method
+        individual_recipe_helper   
+         
     end
 
     def recipes_by_category
@@ -83,6 +88,28 @@ class Interface
 
     end
 
+    def individual_recipe_helper
+        prompt.select("What would you like to do?") do |menu|
+            menu.choice "Save This Recipe", -> {save_recipe}
+            menu.choice "Continue Browsing", -> {all_recipe_names}
+            menu.choice "Back to Main", -> {main_menu}
+            menu.choice "Close Sesame!", -> {exit_helper}
+        end
+    end
+
+    def save_recipe
+        UserRecipe.create(user_id: self.user.id, recipe_id: @@recipe_to_save)
+        puts "⭐️ Added to your tahini recipe stash!⭐️ "
+        saved_recipe_helper
+    end
+
+    def saved_recipe_helper
+        prompt.select("What would you like to do?") do |menu|
+            menu.choice "Continue Browsing", -> {all_recipe_names}
+            menu.choice "Back to Main", -> {main_menu}
+            menu.choice "Close Sesame!", -> {exit_helper}
+        end
+    end
 
 end
 
