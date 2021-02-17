@@ -1,3 +1,40 @@
+INTERFACE#methods 
+1. Interface#welcome
+    -add welcome message 
+    -choose option 
+USER#methods 
+USER.methods 
+
+RECIPE#methods 
+RECIPE.methods
+
+USER/RECIPE#methods 
+USER/RECIPE.methods 
+
+RECIPE/CATEGORY#methods 
+RECIPE/CATEGORY.methods 
+
+CATEGORY#methods 
+CATEGORY.methods
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Ruby CLI stub repo
 
 ### NOTE

@@ -7,6 +7,7 @@ gem "rake"
 gem "require_all"
 gem "sqlite3"
 gem "pry"
+gem 'activerecord-reset-pk-sequence'
 gem "faker"
 gem "artii"
 
