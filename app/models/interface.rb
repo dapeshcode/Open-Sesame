@@ -10,7 +10,8 @@ class Interface
     end
     
     def welcome
-        puts "Open Sesame!"
+        Logo.animation
+        sleep(0.5)
         login
     end
 
@@ -182,7 +183,7 @@ class Interface
     end
 
     def exit_helper
-        puts "Close Sesame!"
+        Logo.exit
     end
 
     def box(content)
@@ -191,5 +192,6 @@ class Interface
         end
         puts border
     end
+
 end 
 
