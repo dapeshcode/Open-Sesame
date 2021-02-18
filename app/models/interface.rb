@@ -57,10 +57,6 @@ end
 
 def exit_helper
     puts "Close Sesame!"
-    # sleep(1)
-    # logo
-    # stop_music
-    # sleep(1)
 end
 
 def main_menu
@@ -138,7 +134,6 @@ end
     
 
 def user_recipes
-      #UserRecipe = where user_id == self.id, return recipes
       recipe_choice = prompt.select("Here are your saved recipes:", user_recipe_names)
       recipe = Recipe.find_by_name(recipe_choice)
       prompt.select("What would you like to do with this recipe?") do |menu|
@@ -150,15 +145,6 @@ def user_recipes
         
 end
 
-# def updating_recipe_helper
-#     user_choice = prompt.select("What would you like to do?") do |menu|
-#         menu.choice "Add a Rating or Comments", -> {update_recipe}
-#         menu.choice "Remove From My Recipes", -> {delete_user_recipe(recipe)}
-#         menu.choice "Back to My Recipes", -> {user_recipes}
-#         menu.choice "Back to Main", -> {main_menu}
-#         menu.choice "Close Sesame!", -> {exit_helper}
-#     end
-# end
 
 def update_recipe(user_recipe_hash)
     input = prompt.ask("Add Note:")
