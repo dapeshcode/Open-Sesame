@@ -15,6 +15,7 @@ class Interface
     end
 
     def login
+        puts "\n\n\n"
         prompt.select("Login here or create new account") do |menu|
             menu.choice "Log In", -> {log_in_helper}
             menu.choice "Sign Up", -> {sign_up_helper}
@@ -23,10 +24,11 @@ class Interface
     end
 
     def log_in_helper
-        username = prompt.ask("Enter Username:".colorize(:color => :white, :background => :light_blue))
+        username = prompt.ask("Enter Username:")
         password = prompt.mask("Enter Password:")
         if User.find_by(username: username, password: password)
             self.user = User.find_by(username: username, password: password)
+            puts "\n\n\n"
             puts "Welcome Back #{self.user.name.capitalize}!"
             sleep(1)
             puts "\n"
@@ -40,6 +42,7 @@ class Interface
     end
 
     def sign_up_helper
+        puts "\n\n\n"
         name = prompt.ask("Enter Name:")
         username = prompt.ask("Enter Username:")
         while User.find_by(username: username)
@@ -49,12 +52,15 @@ class Interface
         end
         password = prompt.mask("Enter Password:")
         self.user = User.create(name: name, username: username, password: password)
+        puts "\n\n\n"
         prompt.say("Welcome #{self.user.name.capitalize}! You have joined the tahini club ")
         sleep(2)
+        puts "\n\n\n"
         main_menu
     end
 
     def main_menu
+        puts "\n"
         prompt.select("What would you like to do?") do |menu|
         menu.choice "Browse All Recipes", -> {all_recipe_names}
         menu.choice "Search By Category", -> {recipes_by_category}
@@ -64,13 +70,13 @@ class Interface
     end
 
     def all_recipe_names
+        puts "\n"
         menu_choice = prompt.select("Which recipe sounds good to you?", Recipe.all_recipes)
         recipe = Recipe.find_by_name(menu_choice)
         @@recipe_to_save = recipe.id
-        puts recipe.name
-        puts recipe.ingredients
-        puts recipe.method
+        recipe_card = "\n\n #{recipe.name.upcase}\n\n\n #{recipe.ingredients}\n\n\n #{recipe.method}\n"
         puts "\n"
+        box(recipe_card)
         sleep(1)
         individual_recipe_helper   
     end
@@ -78,12 +84,24 @@ class Interface
     def recipes_by_category
         input = prompt.select("What are you in the mood for?", Category.all_category_names)
         show_list_array = Category.find_by(name: input)
+        puts "\n"
         recipe = prompt.select("select a recipe", show_list_array.show_recipe_name)
         recipe_instance = Recipe.find_by_name(recipe)
         view_category_individual_recipe(recipe_instance)
     end
 
+    def view_category_individual_recipe(recipe)
+        puts "\n"
+        recipe_card = "\n\n #{recipe.name.upcase}\n\n\n #{recipe.ingredients}\n\n\n #{recipe.method}\n"
+        puts "\n"
+        box(recipe_card)
+        puts "\n"
+        sleep(1)
+        category_recipe_helper
+    end
+
     def category_recipe_helper
+        puts "\n"
         prompt.select("What would you like to do?") do |menu|
             menu.choice "Save This Recipe", -> {save_recipe}
             menu.choice "Continue Browsing", -> {recipes_by_category}
@@ -92,18 +110,10 @@ class Interface
         end
     end
 
-    def view_category_individual_recipe(recipe)
-        user_recipe_instance = UserRecipe.find_by(user_id: user.id, recipe_id: recipe.id)
-        puts "\n"
-        puts "🗒 NOTES: " + user_recipe_instance.notes if user_recipe_instance.notes != nil
-        puts "\n"
-        sleep(1)
-        category_recipe_helper
-    end
-
     def user_recipes
         recipe_choice = prompt.select("Here are your saved recipes:", user_recipe_names)
         recipe = Recipe.find_by_name(recipe_choice)
+        puts "\n"
         prompt.select("What would you like to do with this recipe?") do |menu|
             menu.choice "Show me the recipe", -> {view_individual_recipe(recipe)}
             menu.choice "Add a note", -> {update_recipe(user_id: self.user.id, recipe_id: recipe.id)}
@@ -117,18 +127,18 @@ class Interface
     end
 
     def view_individual_recipe(recipe)
-        puts recipe.name.upcase
-        puts recipe.ingredients
-        puts recipe.method
+        recipe_card = "\n\n #{recipe.name.upcase}\n\n\n #{recipe.ingredients}\n\n\n #{recipe.method}\n"
         puts "\n"
+        box(recipe_card)
         user_recipe_instance = UserRecipe.find_by(user_id: user.id, recipe_id: recipe.id)
-        puts "🗒 NOTES: " + user_recipe_instance.notes if user_recipe_instance.notes != nil
+        puts "🤓 NOTES: " + user_recipe_instance.notes if user_recipe_instance.notes != nil
         puts "\n"
         sleep(1)
         user_recipes
     end 
 
     def individual_recipe_helper
+        puts "\n"
         prompt.select("What would you like to do?") do |menu|
             menu.choice "Save This Recipe", -> {save_recipe}
             menu.choice "Continue Browsing", -> {all_recipe_names}
@@ -139,11 +149,13 @@ class Interface
 
     def remove_recipe(user_recipe_hash)
         UserRecipe.find_by(user_recipe_hash).destroy
-        puts "Recipe has been removed"
+        puts "💣 💣 💣 💣 💣 💣 💣 💣 "
+        puts "\n"
         main_menu
     end 
 
     def update_recipe(user_recipe_hash)
+        puts "\n"
         input = prompt.ask("Add Note:")
         UserRecipe.find_by(user_recipe_hash).update(notes: input)
         puts "✅ Your note has been added ✅ "
@@ -154,6 +166,7 @@ class Interface
 
     def save_recipe
         UserRecipe.create(user_id: self.user.id, recipe_id: @@recipe_to_save)
+        puts "\n"
         puts "⭐️ This recipe has been added to your tahini cave!⭐️ "
         sleep(1)
         puts "\n"
@@ -161,6 +174,7 @@ class Interface
     end
 
     def saved_recipe_helper
+        puts "\n"
         prompt.select("What would you like to do?") do |menu|
             menu.choice "Back to main", -> {main_menu}
             menu.choice "Close Sesame!", -> {exit_helper}
@@ -169,6 +183,13 @@ class Interface
 
     def exit_helper
         puts "Close Sesame!"
+    end
+
+    def box(content)
+       border = TTY::Box.frame(width: 50, title: {top_left: "SESAME RECIPE"}) do
+             content
+        end
+        puts border
     end
 end 
 
