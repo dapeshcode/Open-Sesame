@@ -9,12 +9,5 @@ class Recipe < ActiveRecord::Base
     self.all.map{|recipe| recipe.name}
   end
 
-  def self.find_by_name(name)
-    Recipe.find_by(name: name)
-  end
-
-  def delete_recipe
-      UserRecipe.destroy(recipe_id: self.id)
-  end
   
 end

@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
     def save_recipe
         self.user_recipes
     end
+
+    
 end
 
 #list of user recipe instances
