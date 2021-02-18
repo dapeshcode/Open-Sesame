@@ -89,9 +89,31 @@ end
 
 def recipes_by_category
     input = prompt.select("What are you in the mood for?", Category.all_category_names)
-    binding.pry
-
+    show_list_array = Category.find_by(name: input)
+    recipe = prompt.select("select a recipe", show_list_array.show_recipe_name)
+    recipe_instance = Recipe.find_by_name(recipe)
+    view_category_individual_recipe(recipe_instance)
+    
+    
 end
+
+def category_recipe_helper
+    prompt.select("What would you like to do?") do |menu|
+        menu.choice "Save This Recipe", -> {save_recipe}
+        menu.choice "Continue Browsing", -> {recipes_by_category}
+        menu.choice "Back to Main", -> {main_menu}
+        menu.choice "Close Sesame!", -> {exit_helper}
+    end
+end
+def view_category_individual_recipe(recipe)
+    puts recipe.name
+    puts recipe.ingredients
+    puts recipe.method
+    user_recipe_instance = UserRecipe.find_by(user_id: user.id, recipe_id: recipe.id)
+    puts "NOTES: " + user_recipe_instance.notes if user_recipe_instance.notes != nil
+    category_recipe_helper
+end 
+
 
 def user_recipe_names
     self.user.recipes.map(&:name).uniq
@@ -146,10 +168,6 @@ def update_recipe(user_recipe_hash)
 
 end
 
-# def delete_user_recipe(recipe)
-#     binding.pry
-#     delete_recipe
-# end
 
 
 def individual_recipe_helper
@@ -169,7 +187,6 @@ end
 
 def saved_recipe_helper
     prompt.select("What would you like to do?") do |menu|
-        menu.choice "Continue Browsing", -> {all_recipe_names}
         menu.choice "Back to Main", -> {main_menu}
         menu.choice "Close Sesame!", -> {exit_helper}
     end

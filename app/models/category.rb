@@ -15,7 +15,6 @@ class Category < ActiveRecord::Base
     end 
 
     def show_recipe_name
-      binding.pry
       show_full_recipe.map(&:name)
     end 
   end

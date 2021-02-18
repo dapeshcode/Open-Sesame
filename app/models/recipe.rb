@@ -9,6 +9,9 @@ class Recipe < ActiveRecord::Base
     self.all.map{|recipe| recipe.name}
   end
 
+  def find_by_name
+  end 
+
   
   
 end
