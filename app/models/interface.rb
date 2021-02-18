@@ -18,7 +18,6 @@ def welcome
 end
 
 def login
-    #match username, and match password, if !match return error
    prompt.select("Login here or create new account") do |menu|
         menu.choice "Log In", -> {log_in_helper}
         menu.choice "Sign Up", -> {sign_up_helper}
@@ -179,4 +178,7 @@ def saved_recipe_helper
 
 end
 end 
+
+
+
 
