@@ -1,4 +1,5 @@
-OPEN SESEAME 
+# OPEN SESAME 
+
 ## DESCRIPTION ##
     This app enables users to browse, save, and add notes to recipes that are tahini based. 
 
