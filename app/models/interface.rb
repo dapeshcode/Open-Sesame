@@ -30,7 +30,7 @@ class Interface
         if User.find_by(username: username, password: password)
             self.user = User.find_by(username: username, password: password)
             puts "\n\n\n"
-            puts "Welcome Back #{self.user.name.capitalize}!"
+            puts "Welcome back to the cave, #{self.user.name.capitalize}!"
             sleep(1)
             puts "\n"
             main_menu
@@ -54,7 +54,7 @@ class Interface
         password = prompt.mask("Enter Password:")
         self.user = User.create(name: name, username: username, password: password)
         puts "\n\n\n"
-        prompt.say("Welcome #{self.user.name.capitalize}! You have joined the tahini club ")
+        prompt.say("Welcome #{self.user.name.capitalize}! You are now entering the cave!")
         sleep(2)
         puts "\n\n\n"
         main_menu
@@ -83,6 +83,7 @@ class Interface
     end
 
     def recipes_by_category
+        puts "\n"
         input = prompt.select("What are you in the mood for?", Category.all_category_names)
         show_list_array = Category.find_by(name: input)
         puts "\n"
@@ -118,7 +119,7 @@ class Interface
         prompt.select("What would you like to do with this recipe?") do |menu|
             menu.choice "Show me the recipe", -> {view_individual_recipe(recipe)}
             menu.choice "Add a note", -> {update_recipe(user_id: self.user.id, recipe_id: recipe.id)}
-            menu.choice "Remove from my cave", -> {remove_recipe(user_id: self.user.id, recipe_id: recipe.id)}
+            menu.choice "Remove from my recipes", -> {remove_recipe(user_id: self.user.id, recipe_id: recipe.id)}
             menu.choice "Return to main menu", -> {main_menu}
         end 
     end
@@ -150,7 +151,8 @@ class Interface
 
     def remove_recipe(user_recipe_hash)
         UserRecipe.find_by(user_recipe_hash).destroy
-        puts "💣 💣 💣 💣 💣 💣 💣 💣 "
+        puts "\n"
+        puts "💣 💣 💣 💣 💣 💣 💣 💣  a recipe in reci-pieces"
         puts "\n"
         main_menu
     end 
@@ -187,7 +189,7 @@ class Interface
     end
 
     def box(content)
-       border = TTY::Box.frame(width: 50, title: {top_left: "SESAME RECIPE"}) do
+       border = TTY::Box.frame(width: 50, height: 35, title: {top_left: "SESAME RECIPE"}) do
              content
         end
         puts border
