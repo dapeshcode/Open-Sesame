@@ -1,21 +1,24 @@
-INTERFACE#methods 
-1. Interface#welcome
-    -add welcome message 
-    -choose option 
-USER#methods 
-USER.methods 
+                        OPEN SESEAME 
+DESCRIPTION
+    This app enables users to browse, save, and add notes to recipes that are tahini based. 
 
-RECIPE#methods 
-RECIPE.methods
+FEATURES 
+    1. View all recipes 
+    2. Filter recipes by category
+    3. Keep track of saved recipes
+    4. Add notes to recipes
+    5. Remove recipes from saved recipes
 
-USER/RECIPE#methods 
-USER/RECIPE.methods 
+HOW TO INSTALL
+    1. Git clone the repository into your local directory 
+    2. Run bundle install to install the required gems
+    3. Run rake db:seed 
+    4. Run rake opensesame to run the app
 
-RECIPE/CATEGORY#methods 
-RECIPE/CATEGORY.methods 
+Made By: Yehudis Raitman and Alexandra Peccia
 
-CATEGORY#methods 
-CATEGORY.methods
+    
+
 
 
 
