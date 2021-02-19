@@ -13,7 +13,14 @@ HOW TO INSTALL
     1. Git clone the repository into your local directory 
     2. Run bundle install to install the required gems
     3. Run rake db:seed 
-    4. Run rake opensesame to run the app
+    4. Run rake opensesame to run the application
+
+HOW TO USE 
+    1. Run rake opensesame to start the application
+    2. Create a username and password
+    3. Select options from menu to navigate through the application 
+    4. To save a recipe to your recipes, click on individual recipe while browsing
+    5. Select Close Sesame to exit the application
 
 Made By: Yehudis Raitman and Alexandra Peccia
 
