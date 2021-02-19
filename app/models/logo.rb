@@ -147,8 +147,5 @@ def self.exit
 end
 
 end
-# def self.go
-#     self.animation
-# end
                                                                                            
                                                                                            
