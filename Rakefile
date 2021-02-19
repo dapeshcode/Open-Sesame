@@ -11,7 +11,7 @@ task :console do
 end
 
 desc "start our app"
-task :start do
+task :opensesame do
 
   # app = openSesame.new
   # app.run

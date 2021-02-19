@@ -5,192 +5,195 @@ class Interface
 
     @@recipe_to_save = 0 
 
-def initialize
-    @prompt = TTY::Prompt.new
-end
-@@recipe_to_save = 0 
-
-
-
-def welcome
-    puts "Open Sesame!"
-    login
-end
-
-def login
-    #match username, and match password, if !match return error
-   prompt.select("Login here or create new account") do |menu|
-        menu.choice "Log In", -> {log_in_helper}
-        menu.choice "Sign Up", -> {sign_up_helper}
-        menu.choice "Exit", -> {exit_helper}
-     end
-end
-
-def log_in_helper
-    username = prompt.ask("Enter Username:")
-    password = prompt.mask("Enter Password:")
-    if User.find_by(username: username, password: password)
-        self.user = User.find_by(username: username, password: password)
-        puts "Welcome Back #{self.user.name}!"
-        sleep(2)
-        main_menu
-    else
-        prompt.error("Incorrect Username or Password")
-        sleep(1)
-        log_in_helper
+    def initialize
+        @prompt = TTY::Prompt.new
     end
-end
+    
+    def welcome
+        Logo.animation
+        sleep(0.5)
+        login
+    end
 
-def sign_up_helper
-    name = prompt.ask("Enter Name:")
-    username = prompt.ask("Enter Username:")
-    while User.find_by(username: username)
-        prompt.error("This username is already taken.")
+    def login
+        puts "\n\n\n"
+        prompt.select("Login here or create new account") do |menu|
+            menu.choice "Log In", -> {log_in_helper}
+            menu.choice "Sign Up", -> {sign_up_helper}
+            menu.choice "Exit", -> {exit_helper}
+        end
+    end
+
+    def log_in_helper
         username = prompt.ask("Enter Username:")
-    end
-    password = prompt.mask("Enter Password:")
-    self.user = User.create(name: name, username: username, password: password)
-    prompt.say("Welcome #{self.user.name}! You have joined the tahini club")
-    sleep(2)
-    main_menu
-end
-
-def exit_helper
-    puts "Close Sesame!"
-    # sleep(1)
-    # logo
-    # stop_music
-    # sleep(1)
-end
-
-def main_menu
-    prompt.select("What would you like to do?") do |menu|
-    menu.choice "Browse All Recipes", -> {all_recipe_names}
-    menu.choice "Search By Category", -> {recipes_by_category}
-    menu.choice "My Saved Recipes", -> {user_recipes}
-    menu.choice "Close Sesame!", -> {exit_helper}
-    end
-end
-
-def all_recipe_names
-    menu_choice = prompt.select("Which recipe sounds good to you?", Recipe.all_recipes)
-    recipe = Recipe.find_by_name(menu_choice)
-    @@recipe_to_save = recipe.id
-    puts recipe.name
-    puts recipe.ingredients
-    puts recipe.method
-    individual_recipe_helper   
-end
-
-def edit_recipes_helper
-    user_input = prompt.select("Update or Remove",[update, remove])
-end
-
-
-def recipes_by_category
-    input = prompt.select("What are you in the mood for?", Category.all_category_names)
-    show_list_array = Category.find_by(name: input)
-    recipe = prompt.select("select a recipe", show_list_array.show_recipe_name)
-    recipe_instance = Recipe.find_by_name(recipe)
-    view_category_individual_recipe(recipe_instance)
-    
-    
-end
-
-def category_recipe_helper
-    prompt.select("What would you like to do?") do |menu|
-        menu.choice "Save This Recipe", -> {save_recipe}
-        menu.choice "Continue Browsing", -> {recipes_by_category}
-        menu.choice "Back to Main", -> {main_menu}
-        menu.choice "Close Sesame!", -> {exit_helper}
-    end
-end
-def view_category_individual_recipe(recipe)
-    puts recipe.name
-    puts recipe.ingredients
-    puts recipe.method
-    user_recipe_instance = UserRecipe.find_by(user_id: user.id, recipe_id: recipe.id)
-    puts "NOTES: " + user_recipe_instance.notes if user_recipe_instance.notes != nil
-    category_recipe_helper
-end 
-
-
-def user_recipe_names
-    self.user.recipes.map(&:name).uniq
-end
-
-def view_individual_recipe(recipe)
-    puts recipe.name
-    puts recipe.ingredients
-    puts recipe.method
-    user_recipe_instance = UserRecipe.find_by(user_id: user.id, recipe_id: recipe.id)
-    puts "NOTES: " + user_recipe_instance.notes if user_recipe_instance.notes != nil
-    user_recipes
-    
-end 
-
-def remove_recipe(user_recipe_hash)
-    UserRecipe.find_by(user_recipe_hash).destroy
-    puts "Recipe has been removed"
-    main_menu
-end 
-   
-    
-
-def user_recipes
-      #UserRecipe = where user_id == self.id, return recipes
-      recipe_choice = prompt.select("Here are your saved recipes:", user_recipe_names)
-      recipe = Recipe.find_by_name(recipe_choice)
-      prompt.select("What would you like to do with this recipe?") do |menu|
-        menu.choice "view", -> {view_individual_recipe(recipe)}
-        menu.choice "add note", -> {update_recipe(user_id: self.user.id, recipe_id: recipe.id)}
-        menu.choice "remove", -> {remove_recipe(user_id: self.user.id, recipe_id: recipe.id)}
-        menu.choice "back to main menu", -> {main_menu}
-      end 
-        
-end
-
-# def updating_recipe_helper
-#     user_choice = prompt.select("What would you like to do?") do |menu|
-#         menu.choice "Add a Rating or Comments", -> {update_recipe}
-#         menu.choice "Remove From My Recipes", -> {delete_user_recipe(recipe)}
-#         menu.choice "Back to My Recipes", -> {user_recipes}
-#         menu.choice "Back to Main", -> {main_menu}
-#         menu.choice "Close Sesame!", -> {exit_helper}
-#     end
-# end
-
-def update_recipe(user_recipe_hash)
-    input = prompt.ask("Add Note:")
-    UserRecipe.find_by(user_recipe_hash).update(notes: input)
-    puts "Note Added!!!"
-    user_recipes
-
-end
-
-
-
-def individual_recipe_helper
-    prompt.select("What would you like to do?") do |menu|
-        menu.choice "Save This Recipe", -> {save_recipe}
-        menu.choice "Continue Browsing", -> {all_recipe_names}
-        menu.choice "Back to Main", -> {main_menu}
-        menu.choice "Close Sesame!", -> {exit_helper}
-    end
-end
-
-def save_recipe
-    UserRecipe.create(user_id: self.user.id, recipe_id: @@recipe_to_save)
-    puts "⭐️ Added to your tahini recipe stash!⭐️ "
-    saved_recipe_helper
-end
-
-def saved_recipe_helper
-    prompt.select("What would you like to do?") do |menu|
-        menu.choice "Back to Main", -> {main_menu}
-        menu.choice "Close Sesame!", -> {exit_helper}
+        password = prompt.mask("Enter Password:")
+        if User.find_by(username: username, password: password)
+            self.user = User.find_by(username: username, password: password)
+            puts "\n\n"
+            puts "Welcome back to the cave, #{self.user.name.capitalize}!".colorize(:cyan)
+            sleep(1)
+            puts "\n"
+            main_menu
+        else
+            prompt.error("Incorrect Username or Password")
+            sleep(1)
+            puts "\n"
+            log_in_helper
+        end
     end
 
-end
+    def sign_up_helper
+        puts "\n\n\n"
+        name = prompt.ask("Enter Name:")
+        username = prompt.ask("Enter Username:")
+        while User.find_by(username: username)
+            prompt.error("This username is already taken.")
+            puts "\n"
+            username = prompt.ask("Enter Username:")
+        end
+        password = prompt.mask("Enter Password:")
+        self.user = User.create(name: name, username: username, password: password)
+        puts "\n\n\n"
+        prompt.say("Welcome #{self.user.name.capitalize}! You are now entering the cave!".colorize(:light_magenta))
+        sleep(2)
+        puts "\n\n\n"
+        main_menu
+    end
+
+    def main_menu
+        puts "\n"
+        prompt.select("What would you like to do?") do |menu|
+        menu.choice "Browse All Recipes".colorize(:light_magenta), -> {all_recipe_names}
+        menu.choice "Search By Category".colorize(:light_magenta), -> {recipes_by_category}
+        menu.choice "My Saved Recipes".colorize(:light_magenta), -> {user_recipes}
+        menu.choice "Close Sesame!".colorize(:light_magenta), -> {exit_helper}
+        end
+    end
+
+    def all_recipe_names
+        puts "\n"
+        menu_choice = prompt.select("Which recipe sounds good to you?", Recipe.all_recipes)
+        recipe = Recipe.find_by_name(menu_choice)
+        @@recipe_to_save = recipe.id
+        recipe_card = "\n\n #{recipe.name.upcase}\n\n\n #{recipe.ingredients}\n\n\n #{recipe.method}\n"
+        puts "\n"
+        box(recipe_card)
+        sleep(1)
+        individual_recipe_helper   
+    end
+
+    def recipes_by_category
+        puts "\n"
+        input = prompt.select("What are you in the mood for?", Category.all_category_names)
+        show_list_array = Category.find_by(name: input)
+        puts "\n"
+        recipe = prompt.select("select a recipe", show_list_array.show_recipe_name)
+        recipe_instance = Recipe.find_by_name(recipe)
+        view_category_individual_recipe(recipe_instance)
+    end
+
+    def view_category_individual_recipe(recipe)
+        puts "\n"
+        recipe_card = "\n\n #{recipe.name.upcase}\n\n\n #{recipe.ingredients}\n\n\n #{recipe.method}\n"
+        puts "\n"
+        box(recipe_card)
+        puts "\n"
+        sleep(1)
+        category_recipe_helper
+    end
+
+    def category_recipe_helper
+        puts "\n"
+        prompt.select("What would you like to do?") do |menu|
+            menu.choice "Save This Recipe", -> {save_recipe}
+            menu.choice "Continue Browsing", -> {recipes_by_category}
+            menu.choice "Back to Main", -> {main_menu}
+            menu.choice "Close Sesame!", -> {exit_helper}
+        end
+    end
+
+    def user_recipes
+        recipe_choice = prompt.select("Here are your saved recipes:", user_recipe_names)
+        recipe = Recipe.find_by_name(recipe_choice)
+        puts "\n"
+        prompt.select("What would you like to do with this recipe?") do |menu|
+            menu.choice "Show me the recipe", -> {view_individual_recipe(recipe)}
+            menu.choice "Add a note", -> {update_recipe(user_id: self.user.id, recipe_id: recipe.id)}
+            menu.choice "Remove from my recipes", -> {remove_recipe(user_id: self.user.id, recipe_id: recipe.id)}
+            menu.choice "Return to main menu", -> {main_menu}
+        end 
+    end
+
+    def user_recipe_names
+        self.user.recipes.map(&:name).uniq
+    end
+
+    def view_individual_recipe(recipe)
+        recipe_card = "\n\n #{recipe.name.upcase}\n\n\n #{recipe.ingredients}\n\n\n #{recipe.method}\n"
+        puts "\n"
+        box(recipe_card)
+        user_recipe_instance = UserRecipe.find_by(user_id: user.id, recipe_id: recipe.id)
+        puts "🤓 NOTES: " + user_recipe_instance.notes if user_recipe_instance.notes != nil
+        puts "\n"
+        sleep(1)
+        user_recipes
+    end 
+
+    def individual_recipe_helper
+        puts "\n"
+        prompt.select("What would you like to do?") do |menu|
+            menu.choice "Save This Recipe", -> {save_recipe}
+            menu.choice "Continue Browsing", -> {all_recipe_names}
+            menu.choice "Back to Main", -> {main_menu}
+            menu.choice "Close Sesame!", -> {exit_helper}
+        end
+    end
+
+    def remove_recipe(user_recipe_hash)
+        UserRecipe.find_by(user_recipe_hash).destroy
+        puts "\n"
+        puts "💣 💣 💣 💣 💣 💣 💣 💣  a recipe in reci-pieces"
+        puts "\n"
+        main_menu
+    end 
+
+    def update_recipe(user_recipe_hash)
+        puts "\n"
+        input = prompt.ask("Add Note:")
+        UserRecipe.find_by(user_recipe_hash).update(notes: input)
+        puts "✅ Your note has been added ✅ "
+        sleep(1)
+        puts "\n"
+        user_recipes
+    end
+
+    def save_recipe
+        UserRecipe.create(user_id: self.user.id, recipe_id: @@recipe_to_save)
+        puts "\n"
+        puts "⭐️ This recipe has been added to your tahini cave!⭐️ "
+        sleep(1)
+        puts "\n"
+        saved_recipe_helper
+    end
+
+    def saved_recipe_helper
+        puts "\n"
+        prompt.select("What would you like to do?") do |menu|
+            menu.choice "Back to main", -> {main_menu}
+            menu.choice "Close Sesame!", -> {exit_helper}
+        end
+    end
+
+    def exit_helper
+        Logo.exit
+    end
+
+    def box(content)
+       border = TTY::Box.frame(width: 50, height: 35, title: {top_left: "SESAME RECIPE"}) do
+             content
+        end
+        puts border
+    end
+
 end 
 
