@@ -29,8 +29,8 @@ class Interface
         password = prompt.mask("Enter Password:")
         if User.find_by(username: username, password: password)
             self.user = User.find_by(username: username, password: password)
-            puts "\n\n\n"
-            puts "Welcome back to the cave, #{self.user.name.capitalize}!"
+            puts "\n\n"
+            puts "Welcome back to the cave, #{self.user.name.capitalize}!".colorize(:cyan)
             sleep(1)
             puts "\n"
             main_menu
@@ -54,7 +54,7 @@ class Interface
         password = prompt.mask("Enter Password:")
         self.user = User.create(name: name, username: username, password: password)
         puts "\n\n\n"
-        prompt.say("Welcome #{self.user.name.capitalize}! You are now entering the cave!")
+        prompt.say("Welcome #{self.user.name.capitalize}! You are now entering the cave!".colorize(:light_magenta))
         sleep(2)
         puts "\n\n\n"
         main_menu
@@ -63,10 +63,10 @@ class Interface
     def main_menu
         puts "\n"
         prompt.select("What would you like to do?") do |menu|
-        menu.choice "Browse All Recipes", -> {all_recipe_names}
-        menu.choice "Search By Category", -> {recipes_by_category}
-        menu.choice "My Saved Recipes", -> {user_recipes}
-        menu.choice "Close Sesame!", -> {exit_helper}
+        menu.choice "Browse All Recipes".colorize(:light_magenta), -> {all_recipe_names}
+        menu.choice "Search By Category".colorize(:light_magenta), -> {recipes_by_category}
+        menu.choice "My Saved Recipes".colorize(:light_magenta), -> {user_recipes}
+        menu.choice "Close Sesame!".colorize(:light_magenta), -> {exit_helper}
         end
     end
 
