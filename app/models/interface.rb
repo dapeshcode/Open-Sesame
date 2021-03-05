@@ -89,6 +89,7 @@ class Interface
         puts "\n"
         recipe = prompt.select("select a recipe", show_list_array.show_recipe_name)
         recipe_instance = Recipe.find_by_name(recipe)
+        @@recipe_to_save = recipe_instance.id
         view_category_individual_recipe(recipe_instance)
     end
 
@@ -125,7 +126,7 @@ class Interface
     end
 
     def user_recipe_names
-        self.user.recipes.map(&:name).uniq
+        self.user.recipes.map(&:name)
     end
 
     def view_individual_recipe(recipe)
@@ -150,10 +151,11 @@ class Interface
     end
 
     def remove_recipe(user_recipe_hash)
-        UserRecipe.find_by(user_recipe_hash).destroy
         puts "\n"
         puts "💣 💣 💣 💣 💣 💣 💣 💣  a recipe in reci-pieces"
         puts "\n"
+        
+        UserRecipe.find_by(user_recipe_hash).destroy
         main_menu
     end 
 
@@ -179,6 +181,7 @@ class Interface
     def saved_recipe_helper
         puts "\n"
         prompt.select("What would you like to do?") do |menu|
+            menu.choice "Continue Browsing", -> {}
             menu.choice "Back to main", -> {main_menu}
             menu.choice "Close Sesame!", -> {exit_helper}
         end
